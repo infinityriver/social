@@ -1,0 +1,26 @@
+.nav {
+    grid-area: n;
+    background-color: #172D13;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+  
+.item a{
+    color: #D76F30;
+    text-decoration: none;
+
+}
+
+.item a.activeLink{
+    font-size: 1.05rem;
+}
+
+.item a.activeLink::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 5px;
+    background-color: #80b88c;
+    border-radius: 10px;
+}
