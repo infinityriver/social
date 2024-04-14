@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux' 
-import { follow, setCurrentPage, setTotalUsersCount, setUser, toggleIsFetching, unfollow } from '../../redux/users-reducer'
+import { follow, setCurrentPage, setTotalUsersCount, setUser, toggleIsFetching, unfollow, toggleFollowingProgress, getUsersThunkCreator } from '../../redux/users-reducer'
 import Users from './Users'
 import Preloader from '../Preloader/Preloader'
 import { usersAPI } from '../../api/api'
@@ -9,12 +9,7 @@ import { usersAPI } from '../../api/api'
 class UsersContainer extends React.Component  {
 
     componentDidMount() {
-        this.props.toggleIsFetching(true)
-        usersAPI.getUsers(this.props.currentPage, this.props.pageSize).then(data => {
-            this.props.toggleIsFetching(false)
-            this.props.setUser(data.items)
-            this.props.setTotalUsersCount(data.totalCount)
-        })
+        this.props.getUsersThunkCreator(this.props.currentPage, this.props.pageSize)
     }
 
     onPageChanged = (pageNumber) => {
@@ -38,7 +33,9 @@ class UsersContainer extends React.Component  {
                       currentPage = {this.props.currentPage}
                       unfollow = {this.props.unfollow}
                       follow = {this.props.follow}
-                      onPageChanged = {this.onPageChanged}/>
+                      onPageChanged = {this.onPageChanged}
+                      toggleFollowingProgress = {this.props.toggleFollowingProgress}
+                      followingInProgress = {this.props.followingInProgress}/>
         </> 
     }
 }
@@ -50,7 +47,8 @@ let mapStateToProps = (state) => {
         pageSize: state.usersPage.pageSize,
         totalUsersCount: state.usersPage.totalUsersCount,
         currentPage: state.usersPage.currentPage,
-        isFetching: state.usersPage.isFetching
+        isFetching: state.usersPage.isFetching,
+        followingInProgress: state.usersPage.followingInProgress
     }
 }
 
@@ -83,7 +81,9 @@ export default connect(mapStateToProps, {
     setUser,
     setCurrentPage,
     setTotalUsersCount,
-    toggleIsFetching
+    toggleIsFetching,
+    toggleFollowingProgress,
+    getUsersThunkCreator
 }
     ) (UsersContainer)
 
